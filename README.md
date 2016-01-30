@@ -27,6 +27,20 @@ Users of XTerm and other X resources systems will fancy this:
 
     $ hodler -in adio.itermcolors -out Xresources -output_format Xresources
 
+# Examples
+
+Borland theme in XTerm:
+
+
+![Demo of XTerm with Borland Theme](Demo XTerm Borland.png)
+
+
+Reference case of Borland theme in iTerm 2:
+
+
+![Demo of iTerm 2 with Borland Theme](Demo iTerm2 Borland.png)
+
+
 # Build Status
 
 [![Build Status](https://travis-ci.org/matttproud/hodler.svg)](https://travis-ci.org/matttproud/hodler)
