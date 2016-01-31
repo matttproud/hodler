@@ -47,7 +47,7 @@ var (
 			`/* Suckless ST config.h Fragment
  * Generated with Hodler (http://github.com/matttproud/hodler)
  */
- static const char *colorname[] = {
+static const char *colorname[] = {
 	"{{.ANSI0}}",		/* 0: ANSI Color 0 */
 	"{{.ANSI1}}",		/* 1: ANSI Color 1 */
 	"{{.ANSI2}}",		/* 2: ANSI Color 2 */
@@ -64,19 +64,20 @@ var (
 	"{{.ANSI13}}",		/* 13: ANSI Color 13 */
 	"{{.ANSI14}}",		/* 14: ANSI Color 14 */
 	"{{.ANSI15}}",		/* 15: ANSI Color 15 */
-	"{{.Background}}",		/* 16: Background */
-	"{{.Foreground}}",		/* 17: Foreground */
-	"{{.Cursor}}",		/* 20: Cursor */
-	"{{.CursorText}}",		/* 21: Cursor Text */
+	[255] = 0,
+	[256] = "{{.Background}}",		/* 256: Background */
+	[257] = "{{.Foreground}}",		/* 257: Foreground */
+	[258] = "{{.Cursor}}",		/* 258: Cursor */
+	[259] = "{{.CursorText}}",		/* 259: Cursor Text */
 	/* No support for text highlight coloring; would be {{.SelectedText}}. */
 	/* No support for highlight coloring; would be {{.Selection}}. */
 	/* No support for bold coloring; would be {{.Bold}}. */
 };
 
-static unsigned int defaultfg  = 17;
-static unsigned int defaultbg  = 16;
-static unsigned int defaultcs  = 20;
-static unsigned int defaultrcs = 21;
+static unsigned int defaultfg  = 257;
+static unsigned int defaultbg  = 256;
+static unsigned int defaultcs  = 258;
+static unsigned int defaultrcs = 259;
 `))
 )
 

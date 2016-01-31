@@ -29,6 +29,12 @@ Users of XTerm and other X resources systems will fancy this:
 
 # Examples
 
+Borland theme in ST:
+
+
+![Demo of ST with Borland Theme](Demo ST Borland.png)
+
+
 Borland theme in XTerm:
 
 
