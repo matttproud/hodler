@@ -16,30 +16,30 @@ var (
 	xresources = template.Must(
 		template.New("Xresources").Parse(
 			`! X Resources: Generated with Hodler (http://github.com/matttproud/hodler)
-*color0: {{.ANSI0}}
-*color1: {{.ANSI1}}
-*color2: {{.ANSI2}}
-*color3: {{.ANSI3}}
-*color4: {{.ANSI4}}
-*color5: {{.ANSI5}}
-*color6: {{.ANSI6}}
-*color7: {{.ANSI7}}
-*color8: {{.ANSI8}}
-*color9: {{.ANSI9}}
-*color10: {{.ANSI10}}
-*color11: {{.ANSI11}}
-*color12: {{.ANSI12}}
-*color13: {{.ANSI13}}
-*color14: {{.ANSI14}}
-*color15: {{.ANSI15}}
-*background: {{.Background}}
-*foreground: {{.Foreground}}
-*cursorColor: {{.Cursor}}
+*color0: #{{.ANSI0}}
+*color1: #{{.ANSI1}}
+*color2: #{{.ANSI2}}
+*color3: #{{.ANSI3}}
+*color4: #{{.ANSI4}}
+*color5: #{{.ANSI5}}
+*color6: #{{.ANSI6}}
+*color7: #{{.ANSI7}}
+*color8: #{{.ANSI8}}
+*color9: #{{.ANSI9}}
+*color10: #{{.ANSI10}}
+*color11: #{{.ANSI11}}
+*color12: #{{.ANSI12}}
+*color13: #{{.ANSI13}}
+*color14: #{{.ANSI14}}
+*color15: #{{.ANSI15}}
+*background: #{{.Background}}
+*foreground: #{{.Foreground}}
+*cursorColor: #{{.Cursor}}
 ! See "highlightColorMode" and "hm" options in XTerm manual page.
-*highlightTextColor: {{.SelectedText}}
-*highlightColor: {{.Selection}}
-! No support for cursor text coloring; would be {{.CursorText}}.
-! No support for bold coloring; would be {{.Bold}}.
+*highlightTextColor: #{{.SelectedText}}
+*highlightColor: #{{.Selection}}
+! No support for cursor text coloring; would be #{{.CursorText}}.
+! No support for bold coloring; would be #{{.Bold}}.
 `))
 
 	suckless = template.Must(
@@ -48,36 +48,73 @@ var (
  * Generated with Hodler (http://github.com/matttproud/hodler)
  */
 static const char *colorname[] = {
-	"{{.ANSI0}}",		/* 0: ANSI Color 0 */
-	"{{.ANSI1}}",		/* 1: ANSI Color 1 */
-	"{{.ANSI2}}",		/* 2: ANSI Color 2 */
-	"{{.ANSI3}}",		/* 3: ANSI Color 3 */
-	"{{.ANSI4}}",		/* 4: ANSI Color 4 */
-	"{{.ANSI5}}",		/* 5: ANSI Color 5 */
-	"{{.ANSI6}}",		/* 6: ANSI Color 6 */
-	"{{.ANSI7}}",		/* 7: ANSI Color 7 */
-	"{{.ANSI8}}",		/* 8: ANSI Color 8 */
-	"{{.ANSI9}}",		/* 9: ANSI Color 9 */
-	"{{.ANSI10}}",		/* 10: ANSI Color 10 */
-	"{{.ANSI11}}",		/* 11: ANSI Color 11 */
-	"{{.ANSI12}}",		/* 12: ANSI Color 12 */
-	"{{.ANSI13}}",		/* 13: ANSI Color 13 */
-	"{{.ANSI14}}",		/* 14: ANSI Color 14 */
-	"{{.ANSI15}}",		/* 15: ANSI Color 15 */
+	"#{{.ANSI0}}",		/* 0: ANSI Color 0 */
+	"#{{.ANSI1}}",		/* 1: ANSI Color 1 */
+	"#{{.ANSI2}}",		/* 2: ANSI Color 2 */
+	"#{{.ANSI3}}",		/* 3: ANSI Color 3 */
+	"#{{.ANSI4}}",		/* 4: ANSI Color 4 */
+	"#{{.ANSI5}}",		/* 5: ANSI Color 5 */
+	"#{{.ANSI6}}",		/* 6: ANSI Color 6 */
+	"#{{.ANSI7}}",		/* 7: ANSI Color 7 */
+	"#{{.ANSI8}}",		/* 8: ANSI Color 8 */
+	"#{{.ANSI9}}",		/* 9: ANSI Color 9 */
+	"#{{.ANSI10}}",		/* 10: ANSI Color 10 */
+	"#{{.ANSI11}}",		/* 11: ANSI Color 11 */
+	"#{{.ANSI12}}",		/* 12: ANSI Color 12 */
+	"#{{.ANSI13}}",		/* 13: ANSI Color 13 */
+	"#{{.ANSI14}}",		/* 14: ANSI Color 14 */
+	"#{{.ANSI15}}",		/* 15: ANSI Color 15 */
 	[255] = 0,
-	[256] = "{{.Background}}",		/* 256: Background */
-	[257] = "{{.Foreground}}",		/* 257: Foreground */
-	[258] = "{{.Cursor}}",		/* 258: Cursor */
-	[259] = "{{.CursorText}}",		/* 259: Cursor Text */
-	/* No support for text highlight coloring; would be {{.SelectedText}}. */
-	/* No support for highlight coloring; would be {{.Selection}}. */
-	/* No support for bold coloring; would be {{.Bold}}. */
+	[256] = "#{{.Background}}",		/* 256: Background */
+	[257] = "#{{.Foreground}}",		/* 257: Foreground */
+	[258] = "#{{.Cursor}}",		/* 258: Cursor */
+	[259] = "#{{.CursorText}}",		/* 259: Cursor Text */
+	/* No support for text highlight coloring; would be #{{.SelectedText}}. */
+	/* No support for highlight coloring; would be #{{.Selection}}. */
+	/* No support for bold coloring; would be #{{.Bold}}. */
 };
 
 static unsigned int defaultfg  = 257;
 static unsigned int defaultbg  = 256;
 static unsigned int defaultcs  = 258;
 static unsigned int defaultrcs = 259;
+`))
+
+	alacritty = template.Must(
+		template.New("Alacritty").Parse(
+			`# Alacritty Colors
+# Generated with Hodler (http://github.com/matttproud/hodler)
+colors:
+  primary:
+    background: '0x{{.Background}}'
+    foreground: '0x{{.Foreground}}'
+
+  cursor:
+    text: '0x{{.CursorText}}'
+    cursor: '0x{{.Cursor}}'
+
+  normal:
+    black:   '0x{{.ANSI0}}'
+    red:     '0x{{.ANSI1}}'
+    green:   '0x{{.ANSI2}}'
+    yellow:  '0x{{.ANSI3}}'
+    blue:    '0x{{.ANSI4}}'
+    magenta: '0x{{.ANSI5}}'
+    cyan:    '0x{{.ANSI6}}'
+    white:   '0x{{.ANSI7}}'
+
+  bright:
+    black:   '0x{{.ANSI8}}'
+    red:     '0x{{.ANSI9}}'
+    green:   '0x{{.ANSI10}}'
+    yellow:  '0x{{.ANSI11}}'
+    blue:    '0x{{.ANSI12}}'
+    magenta: '0x{{.ANSI13}}'
+    cyan:    '0x{{.ANSI14}}'
+    white:   '0x{{.ANSI15}}'
+# No support for text highlight coloring; would be 0x{{.SelectedText}}.
+# No support for highlight coloring; would be 0x{{.Selection}}.
+# No support for bold coloring; would be 0x{{.Bold}}.
 `))
 )
 
@@ -93,7 +130,7 @@ func (d Defn) String() string {
 	r := Normalize(d.Red)
 	g := Normalize(d.Green)
 	b := Normalize(d.Blue)
-	return fmt.Sprintf("#%.2x%.2x%.2x", r, g, b)
+	return fmt.Sprintf("%.2x%.2x%.2x", r, g, b)
 }
 
 type Table struct {
@@ -134,6 +171,8 @@ func GetTmpl(n string) *template.Template {
 		return xresources
 	case "Suckless":
 		return suckless
+	case "Alacritty":
+		return alacritty
 	default:
 		panic("unhandled")
 	}
@@ -146,9 +185,9 @@ func main() {
 	var in, out, outputFormat string
 	flag.StringVar(&in, "in", "", "input source")
 	flag.StringVar(&out, "out", "/dev/stdout", "output destination")
-	flag.StringVar(&outputFormat, "output_format", "", "output format: 'Xresources' or 'Suckless'")
+	flag.StringVar(&outputFormat, "output_format", "", "output format: 'Xresources' or 'Suckless' or 'Alacritty'")
 	flag.Parse()
-	if in == "" || out == "" || (outputFormat != "Suckless" && outputFormat != "Xresources") {
+	if in == "" || out == "" || (outputFormat != "Suckless" && outputFormat != "Xresources" && outputFormat != "Alacritty") {
 		flag.Usage()
 		os.Exit(1)
 	}

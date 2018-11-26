@@ -5,7 +5,8 @@
 Lists](https://en.wikipedia.org/wiki/Property_list) into forms that
 the [Suckless Simple Terminal "st"](http://st.suckless.org) and
 [X resources](https://en.wikipedia.org/wiki/X_resources)-based terminal
-emulaters (e.g., [XTerm](http://invisible-island.net/xterm/)) can consume.
+emulaters (e.g., [XTerm](http://invisible-island.net/xterm/)) and
+[Alacritty](https://github.com/jwilm/alacritty) can consume.
 
 # Installation
 
@@ -27,24 +28,33 @@ Users of XTerm and other X resources systems will fancy this:
 
     $ hodler -in adio.itermcolors -out Xresources -output_format Xresources
 
+Users of Alacritty can generate a YAML fragment to embed into their local `alacritty.yml`:
+
+    $ hodler -in adio.itermcolors -out Alacritty -output_format alacritty.yml
+
 # Examples
 
 Borland theme in ST:
 
 
-![Demo of ST with Borland Theme](Demo ST Borland.png)
+![Demo of ST with Borland Theme](Demo_ST_Borland.png)
 
 
 Borland theme in XTerm:
 
 
-![Demo of XTerm with Borland Theme](Demo XTerm Borland.png)
+![Demo of XTerm with Borland Theme](Demo_XTerm_Borland.png)
+
+Borland theme in Alacritty:
+
+
+![Demo of Alacritty with Borland Theme](Demo_Alacritty_Borland.png)
 
 
 Reference case of Borland theme in iTerm 2:
 
 
-![Demo of iTerm 2 with Borland Theme](Demo iTerm2 Borland.png)
+![Demo of iTerm 2 with Borland Theme](Demo_iTerm2_Borland.png)
 
 
 # Build Status
