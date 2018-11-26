@@ -30,7 +30,7 @@ Users of XTerm and other X resources systems will fancy this:
 
 Users of Alacritty can generate a YAML fragment to embed into their local `alacritty.yml`:
 
-    $ hodler -in adio.itermcolors -out Alacritty -output_format alacritty.yml
+    $ hodler -in adio.itermcolors -out alacritty.yml -output_format Alacritty
 
 # Examples
 
