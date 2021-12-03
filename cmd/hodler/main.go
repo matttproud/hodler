@@ -1,4 +1,4 @@
-// hodler converts iTerm2 color schemes to X resources or Suckless ST terminal config.h definitions.
+// hodler converts iTerm2 color schemes into various formats.
 package main
 
 import (
@@ -9,7 +9,7 @@ import (
 	"os"
 	"text/template"
 
-	plist "github.com/DHowett/go-plist"
+	"howett.net/plist"
 )
 
 var (
@@ -116,47 +116,143 @@ colors:
 # No support for highlight coloring; would be 0x{{.Selection}}.
 # No support for bold coloring; would be 0x{{.Bold}}.
 `))
+
+	kernel = template.Must(
+		template.New("Xresources").Funcs(template.FuncMap{"H": kernelHex}).Parse(
+			`# Kernel Command Line: Generated with Hodler (http://github.com/matttproud/hodler)
+vt.default_red={{H .ANSI0.Red}},{{H .ANSI1.Red}},{{H .ANSI2.Red}},{{H .ANSI3.Red}},{{H .ANSI4.Red}},{{H .ANSI5.Red}},{{H .ANSI6.Red}},{{H .ANSI7.Red}},{{H .ANSI8.Red}},{{H .ANSI9.Red}},{{H .ANSI10.Red}},{{H .ANSI11.Red}},{{H .ANSI12.Red}},{{H .ANSI13.Red}},{{H .ANSI14.Red}},{{H .ANSI15.Red}} vt.default_grn={{H .ANSI0.Green}},{{H .ANSI1.Green}},{{H .ANSI2.Green}},{{H .ANSI3.Green}},{{H .ANSI4.Green}},{{H .ANSI5.Green}},{{H .ANSI6.Green}},{{H .ANSI7.Green}},{{H .ANSI8.Green}},{{H .ANSI9.Green}},{{H .ANSI10.Green}},{{H .ANSI11.Green}},{{H .ANSI12.Green}},{{H .ANSI13.Green}},{{H .ANSI14.Green}},{{H .ANSI15.Green}} vt.default_blu={{H .ANSI0.Blue}},{{H .ANSI1.Blue}},{{H .ANSI2.Blue}},{{H .ANSI3.Blue}},{{H .ANSI4.Blue}},{{H .ANSI5.Blue}},{{H .ANSI6.Blue}},{{H .ANSI7.Blue}},{{H .ANSI8.Blue}},{{H .ANSI9.Blue}},{{H .ANSI10.Blue}},{{H .ANSI11.Blue}},{{H .ANSI12.Blue}},{{H .ANSI13.Blue}},{{H .ANSI14.Blue}},{{H .ANSI15.Blue}}
+#
+# No support for background; would be {{.Background}}.
+#   Try using vt.color=0xXY where X and Y refer to color
+#   offsets for background and foreground respectively, or potentially using
+#   setterm -background with closely matching color.
+#   X = {{.BackgroundIndex}}; Y = {{.ForegroundIndex}}
+#
+# No support for foreground; would be {{.Foreground}}.
+#   Try using vt.color=0xXY where X and Y refer to color
+#   offsets for background and foreground respectively, or potentially using
+#   setterm -foreground with closely matching color.
+#   X = {{.BackgroundIndex}}; Y = {{.ForegroundIndex}}
+#
+# No support for cursor color; would be {{.Cursor}}.
+# No support for selected text color; would be {{.SelectedText}}.
+# No support for selection color; would be {{.Selection}}.
+# No support for cursor text coloring; would be {{.CursorText}}.
+#
+# No support for bold coloring; would be {{.Bold}}.
+#   Try using vt.italic=X or vt.underline=X where X refers to
+#   color offsets.
+#   X = {{.BoldIndex}}
+`))
 )
 
-type Defn struct {
+func kernelHex(v float64) string {
+	n := normalize(v)
+	return fmt.Sprintf("0x%.2x", n)
+}
+
+type def struct {
 	Blue  float64 `plist:"Blue Component"`
 	Green float64 `plist:"Green Component"`
 	Red   float64 `plist:"Red Component"`
 }
 
-func Normalize(f float64) uint8 { return uint8(255 * f) }
+func normalize(f float64) uint8 { return uint8(255 * f) }
 
-func (d Defn) String() string {
-	r := Normalize(d.Red)
-	g := Normalize(d.Green)
-	b := Normalize(d.Blue)
+func (d def) String() string {
+	r := normalize(d.Red)
+	g := normalize(d.Green)
+	b := normalize(d.Blue)
 	return fmt.Sprintf("%.2x%.2x%.2x", r, g, b)
 }
 
 type Table struct {
-	ANSI0        Defn `plist:"Ansi 0 Color"`
-	ANSI1        Defn `plist:"Ansi 1 Color"`
-	ANSI2        Defn `plist:"Ansi 2 Color"`
-	ANSI3        Defn `plist:"Ansi 3 Color"`
-	ANSI4        Defn `plist:"Ansi 4 Color"`
-	ANSI5        Defn `plist:"Ansi 5 Color"`
-	ANSI6        Defn `plist:"Ansi 6 Color"`
-	ANSI7        Defn `plist:"Ansi 7 Color"`
-	ANSI8        Defn `plist:"Ansi 8 Color"`
-	ANSI9        Defn `plist:"Ansi 9 Color"`
-	ANSI10       Defn `plist:"Ansi 10 Color"`
-	ANSI11       Defn `plist:"Ansi 11 Color"`
-	ANSI12       Defn `plist:"Ansi 12 Color"`
-	ANSI13       Defn `plist:"Ansi 13 Color"`
-	ANSI14       Defn `plist:"Ansi 14 Color"`
-	ANSI15       Defn `plist:"Ansi 15 Color"`
-	Background   Defn `plist:"Background Color"`
-	Bold         Defn `plist:"Bold Color"`
-	Cursor       Defn `plist:"Cursor Color"`
-	CursorText   Defn `plist:"Cursor Text Color"`
-	Foreground   Defn `plist:"Foreground Color"`
-	SelectedText Defn `plist:"Selected Text Color"`
-	Selection    Defn `plist:"Selection Color"`
+	ANSI0        def `plist:"Ansi 0 Color"`
+	ANSI1        def `plist:"Ansi 1 Color"`
+	ANSI2        def `plist:"Ansi 2 Color"`
+	ANSI3        def `plist:"Ansi 3 Color"`
+	ANSI4        def `plist:"Ansi 4 Color"`
+	ANSI5        def `plist:"Ansi 5 Color"`
+	ANSI6        def `plist:"Ansi 6 Color"`
+	ANSI7        def `plist:"Ansi 7 Color"`
+	ANSI8        def `plist:"Ansi 8 Color"`
+	ANSI9        def `plist:"Ansi 9 Color"`
+	ANSI10       def `plist:"Ansi 10 Color"`
+	ANSI11       def `plist:"Ansi 11 Color"`
+	ANSI12       def `plist:"Ansi 12 Color"`
+	ANSI13       def `plist:"Ansi 13 Color"`
+	ANSI14       def `plist:"Ansi 14 Color"`
+	ANSI15       def `plist:"Ansi 15 Color"`
+	Background   def `plist:"Background Color"`
+	Bold         def `plist:"Bold Color"`
+	Cursor       def `plist:"Cursor Color"`
+	CursorText   def `plist:"Cursor Text Color"`
+	Foreground   def `plist:"Foreground Color"`
+	SelectedText def `plist:"Selected Text Color"`
+	Selection    def `plist:"Selection Color"`
+}
+
+func (t *Table) findIndex(c def) (n int, ok bool) {
+	switch c {
+	case t.ANSI0:
+		return 0, true
+	case t.ANSI1:
+		return 1, true
+	case t.ANSI2:
+		return 2, true
+	case t.ANSI3:
+		return 2, true
+	case t.ANSI4:
+		return 4, true
+	case t.ANSI5:
+		return 5, true
+	case t.ANSI6:
+		return 6, true
+	case t.ANSI7:
+		return 7, true
+	case t.ANSI8:
+		return 8, true
+	case t.ANSI9:
+		return 9, true
+	case t.ANSI10:
+		return 10, true
+	case t.ANSI11:
+		return 11, true
+	case t.ANSI12:
+		return 12, true
+	case t.ANSI13:
+		return 13, true
+	case t.ANSI14:
+		return 14, true
+	case t.ANSI15:
+		return 15, true
+	default:
+		return 0, false
+	}
+}
+
+func (t *Table) ForegroundIndex() string {
+	i, ok := t.findIndex(t.Foreground)
+	if !ok {
+		return "infeasible"
+	}
+	return fmt.Sprintf("%.1x", i)
+}
+
+func (t *Table) BackgroundIndex() string {
+	i, ok := t.findIndex(t.Background)
+	if !ok {
+		return "infeasible"
+	}
+	return fmt.Sprintf("%.1x", i)
+}
+
+func (t *Table) BoldIndex() string {
+	i, ok := t.findIndex(t.Bold)
+	if !ok {
+		return "infeasible"
+	}
+	return fmt.Sprint(i)
 }
 
 func DecodeInput(r io.ReadSeeker) (*Table, error) {
@@ -165,29 +261,69 @@ func DecodeInput(r io.ReadSeeker) (*Table, error) {
 	return &data, d.Decode(&data)
 }
 
-func GetTmpl(n string) *template.Template {
-	switch n {
-	case "Xresources":
-		return xresources
-	case "Suckless":
+func Output(w io.Writer, t *Table, tmpl *template.Template) error { return tmpl.Execute(w, t) }
+
+type outputFormat string
+
+const (
+	unknown    = outputFormat("")
+	Suckless   = outputFormat("Suckless")
+	Xresources = outputFormat("Xresources")
+	Alacritty  = outputFormat("Alacritty")
+	Kernel     = outputFormat("Kernel")
+)
+
+type UnknownFormatError struct {
+	Name string
+}
+
+func (err *UnknownFormatError) Error() string {
+	if err == nil {
+		return ""
+	}
+	return fmt.Sprintf("unknown format: %q", err.Name)
+}
+
+func (f outputFormat) String() string { return string(f) }
+func (f *outputFormat) Set(v string) error {
+	switch outputFormat(v) {
+	case Suckless:
+		*f = Suckless
+	case Xresources:
+		*f = Xresources
+	case Alacritty:
+		*f = Alacritty
+	case Kernel:
+		*f = Kernel
+	default:
+		return &UnknownFormatError{Name: v}
+	}
+	return nil
+}
+
+func (f outputFormat) template() *template.Template {
+	switch f {
+	case Suckless:
 		return suckless
-	case "Alacritty":
+	case Xresources:
+		return xresources
+	case Alacritty:
 		return alacritty
+	case Kernel:
+		return kernel
 	default:
 		panic("unhandled")
 	}
-
 }
 
-func Output(w io.Writer, t *Table, tmpl *template.Template) error { return tmpl.Execute(w, t) }
-
 func main() {
-	var in, out, outputFormat string
+	var in, out string
+	var format outputFormat
 	flag.StringVar(&in, "in", "", "input source")
 	flag.StringVar(&out, "out", "/dev/stdout", "output destination")
-	flag.StringVar(&outputFormat, "output_format", "", "output format: 'Xresources' or 'Suckless' or 'Alacritty'")
+	flag.Var(&format, "output_format", "output format: 'Xresources' or 'Suckless' or 'Alacritty' or 'Kernel'")
 	flag.Parse()
-	if in == "" || out == "" || (outputFormat != "Suckless" && outputFormat != "Xresources" && outputFormat != "Alacritty") {
+	if in == "" || out == "" {
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -205,7 +341,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	tmpl := GetTmpl(outputFormat)
+	tmpl := format.template()
 	if err := Output(fout, tab, tmpl); err != nil {
 		log.Fatalln(err)
 	}
